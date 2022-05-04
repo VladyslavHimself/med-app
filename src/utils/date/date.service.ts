@@ -6,5 +6,5 @@ export const getDateByDefaultFormat = (date: Date): string => {
 
     if (dd < 10) dd = '0' + dd;
 
-    return dd + ' ' + mm.slice(0, 3) + ' ' + yyyy;
+    return `${dd} ${mm.slice(0, 3)}, ${yyyy}`;
 };
