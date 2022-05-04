@@ -20,15 +20,15 @@ function PatientCard({
 
     return (
         <div className={classes['patient-card']}>
-            <div className="patient-data">
-                <div className="patient-data__fullname">
+            <div className={classes['patient-data']}>
+                <div className={classes['patient-data__fullname']}>
                     {name} {surname}
                 </div>
-                <div className="patient-data__birth">{`${getDateByDefaultFormat(
-                    birthDate
-                )}`}</div>
+                <div
+                    className={classes['patient-data__birth']}
+                >{`${getDateByDefaultFormat(birthDate)}`}</div>
             </div>
-            <div className="patient-card__avatar">
+            <div className={classes['patient-card__avatar']}>
                 {gender === 'male' ? (
                     <ManIcon sx={iconStyles} />
                 ) : (

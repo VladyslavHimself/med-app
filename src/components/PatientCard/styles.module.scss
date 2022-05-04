@@ -1,12 +1,51 @@
 .patient-card {
+    display: flex;
+    align-items: center;
+    height: 70px;
+
+    background-color: #75a5db2c;
+    border-bottom: 1px solid white;
+
+    font-family: 'Roboto', sans-serif;
+
+    margin-top: 10px;
+
+    cursor: pointer;
+
+    transition: 0.4s ease;
+
+    &:hover {
+        background-color: #75a5db72;
+    }
+
+    &:active {
+        background-color: #476e9972;
+    }
+
     .patient-data {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: space-evenly;
+
+        height: inherit;
+
+        margin-left: 15px;
+
         &__fullname {
+            font-weight: 400;
+            font-size: 18px;
         }
 
         &__birth {
+            font-weight: 100;
+            font-size: 14px;
         }
     }
 
     &__avatar {
+        width: 50px;
+        display: flex;
+        flex: 0;
     }
 }
