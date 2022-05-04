@@ -9,7 +9,8 @@
     "plugin:react/jsx-runtime",
     "plugin:jsx-a11y/recommended",
     "plugin:import/recommended",
-    "airbnb"
+    "airbnb",
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
