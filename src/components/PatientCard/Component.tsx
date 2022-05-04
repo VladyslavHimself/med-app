@@ -1,7 +1,7 @@
 import classes from './styles.module.scss';
 import ManIcon from '@mui/icons-material/Man';
 import WomanIcon from '@mui/icons-material/Woman';
-import { IPatient } from '../../../interfaces/IPatient.interface';
+import { IPatient } from '../../interfaces/IPatient.interface';
 import { getDateByDefaultFormat } from '../../utils/date/date.service';
 
 interface IProps extends IPatient {}
