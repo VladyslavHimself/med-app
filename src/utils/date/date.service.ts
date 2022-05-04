@@ -1,11 +1,10 @@
 export const getDateByDefaultFormat = (date: Date): string => {
     const inputDate = new Date(date);
     const yyyy = inputDate.getFullYear();
-    let mm: number | string = inputDate.getMonth() + 1;
+    const mm: string = date.toLocaleString('default', { month: 'long' });
     let dd: number | string = inputDate.getDate();
 
     if (dd < 10) dd = '0' + dd;
-    if (mm < 10) mm = '0' + mm;
 
-    return dd + ' ' + mm + ' ' + yyyy;
+    return dd + ' ' + mm.slice(0, 3) + ' ' + yyyy;
 };
