@@ -2,9 +2,16 @@ import { useEffect, useState } from 'react';
 import { IPatient } from '../../interfaces/IPatient.interface';
 import PatientCard from '../PatientCard/Component';
 import classes from './styles.module.scss';
+import HashLoader from 'react-spinners/HashLoader';
 
 function PatientsList(patients: any): JSX.Element {
     const [patientsData, setPatientsData] = useState<{ patients: IPatient[] }>(patients);
+
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        setIsLoading(false);
+    }, []);
 
     useEffect(() => {
         setPatientsData(patients);
@@ -12,7 +19,12 @@ function PatientsList(patients: any): JSX.Element {
 
     return (
         <div className={classes['patients-list']}>
-            {patientsData &&
+            {isLoading ? (
+                <div className={classes.wrapper}>
+                    <HashLoader color={'#f4f4f4'} loading={isLoading} size={50} />
+                </div>
+            ) : (
+                patientsData &&
                 patientsData.patients?.map((patient: IPatient) => {
                     return (
                         <PatientCard
@@ -26,7 +38,8 @@ function PatientsList(patients: any): JSX.Element {
                             state={patient.state}
                         />
                     );
-                })}
+                })
+            )}
         </div>
     );
 }
