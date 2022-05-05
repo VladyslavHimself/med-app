@@ -1,10 +1,10 @@
-export const getDateByDefaultFormat = (date: Date): string => {
-    const inputDate = new Date(date);
+import { Timestamp } from 'firebase/firestore';
+
+export const getDateByDefaultFormat = (date: Timestamp): any => {
+    const inputDate = date.toDate();
     const yyyy = inputDate.getFullYear();
-    const mm: string = date.toLocaleString('default', { month: 'long' });
+    const mm: string = inputDate.toLocaleString('en-us', { month: 'long' }).slice(0, 3);
     let dd: number | string = inputDate.getDate();
 
-    if (dd < 10) dd = '0' + dd;
-
-    return `${dd} ${mm.slice(0, 3)}, ${yyyy}`;
+    return `${dd} ${mm}, ${yyyy}`;
 };
