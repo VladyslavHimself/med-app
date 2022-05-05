@@ -1,18 +1,32 @@
+import { useEffect, useState } from 'react';
+import { IPatient } from '../../interfaces/IPatient.interface';
 import PatientCard from '../PatientCard/Component';
 import classes from './styles.module.scss';
 
-function PatientsList(): JSX.Element {
+function PatientsList(patients: any): JSX.Element {
+    const [patientsData, setPatientsData] = useState<{ patients: IPatient[] }>(patients);
+
+    useEffect(() => {
+        setPatientsData(patients);
+    }, [patients]);
+
     return (
         <div className={classes['patients-list']}>
-            <PatientCard
-                id={0}
-                name={'Vlad'}
-                surname={'Lutchyn'}
-                birthDate={new Date('13 March 2002')}
-                gender={'male'}
-                country={'USA'}
-                address={'114 Fairview'}
-            />
+            {patientsData &&
+                patientsData.patients?.map((patient: IPatient) => {
+                    return (
+                        <PatientCard
+                            key={patient.name + patient.surname + patient.birthDate + Math.random()}
+                            name={patient.name}
+                            surname={patient.surname}
+                            birthDate={patient.birthDate}
+                            gender={patient.gender}
+                            country={patient.country}
+                            address={patient.address}
+                            state={''}
+                        />
+                    );
+                })}
         </div>
     );
 }
