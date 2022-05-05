@@ -5,15 +5,42 @@ import { useEffect, useState } from 'react';
 import classes from '../scss/pages/index.module.scss';
 import PatientsList from '../src/components/PatientsList';
 import SearchField from '../src/components/SearchField';
+import { IPatient } from '../src/interfaces/IPatient.interface';
+import { addNewPatient, getPatients } from '../src/services/firebase/firebase.service';
 
 const Home: NextPage = () => {
-    const [patientsData, setPatientsData] = useState([]);
+    const [patientsData, setPatientsData] = useState<IPatient[]>();
     const [searchInput, setSearchInput] = useState<string>('');
 
-    const onAddNewPatientHandle = (): void => {
-        // TODO: Add new patient
-        setSearchInput('');
+    const fetchPatients = async (): Promise<void> => {
+        const patients: IPatient[] = await getPatients();
+        setPatientsData(patients);
     };
+
+    const onAddNewPatientHandle = async (): Promise<void> => {
+        await addNewPatient({
+            name: 'John',
+            surname: 'Doe',
+            birthDate: new Date('01/01/2000'),
+            gender: 'male',
+            country: 'USA',
+            state: 'New Jersey',
+            address: '114 Fairview Ave',
+            comments: [],
+        });
+        await fetchPatients();
+    };
+
+    const filterPatients = patientsData?.filter((patient: IPatient) => {
+        return (
+            patient.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+            patient.surname.toLowerCase().includes(searchInput.toLowerCase())
+        );
+    });
+
+    useEffect(() => {
+        fetchPatients();
+    }, []);
 
     return (
         <div>
@@ -34,7 +61,7 @@ const Home: NextPage = () => {
 
                     <hr />
 
-                    <PatientsList />
+                    <PatientsList patients={filterPatients} />
                 </div>
             </div>
         </div>
