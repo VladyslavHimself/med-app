@@ -4,12 +4,15 @@ import classes from './styles.module.scss';
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     buttonValue: string;
     textFieldValue?: string;
-
     inputState: string;
     setInputState: React.Dispatch<React.SetStateAction<string>>;
-
     onButtonClickHandler: () => void;
 }
+
+const inputStyles = {
+    input: { color: '#fff' },
+    label: { color: '#fff' },
+};
 
 function SearchField({
     buttonValue,
@@ -24,6 +27,7 @@ function SearchField({
     return (
         <div className={classes['search-field']} {...props}>
             <TextField
+                sx={inputStyles}
                 label={textFieldValue}
                 variant="standard"
                 value={inputState}
