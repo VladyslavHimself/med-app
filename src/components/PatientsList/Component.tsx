@@ -23,7 +23,7 @@ function PatientsList(patients: any): JSX.Element {
                             gender={patient.gender}
                             country={patient.country}
                             address={patient.address}
-                            state={''}
+                            state={patient.state}
                         />
                     );
                 })}
