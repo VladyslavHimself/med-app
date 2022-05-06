@@ -1,13 +1,14 @@
 import { firestoreDb as db } from '../../configs/firebase';
 import { IPatient } from '../../interfaces/IPatient.interface';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+
+const patientsCollectionRef = collection(db, 'patients');
 
 export async function addNewPatient(patient: IPatient) {
-    const { name, surname, birthDate, gender, country, state, address, comments, id } = patient;
+    const { name, surname, birthDate, gender, country, state, address, comments } = patient;
 
     try {
-        const docRef = await addDoc(collection(db, 'patients'), {
-            id,
+        const docRef = await addDoc(patientsCollectionRef, {
             name,
             surname,
             birthDate,
@@ -24,10 +25,23 @@ export async function addNewPatient(patient: IPatient) {
 }
 
 export async function getPatients(): Promise<IPatient[]> {
-    const dataSnapshot = await getDocs(collection(db, 'patients'));
-    const patients: IPatient[] = [];
-    dataSnapshot.forEach((doc) => {
-        patients.push(doc.data() as IPatient);
-    });
+    const dataSnapshot = await getDocs(patientsCollectionRef);
+
+    const patients: IPatient[] = dataSnapshot.docs.map((doc) => ({
+        ...(doc.data() as IPatient),
+        id: doc.id,
+    }));
+
     return patients;
 }
+
+export async function deletePatient(id: string | undefined) {
+    if (!id) console.error('No id provided');
+    try {
+        await deleteDoc(doc(patientsCollectionRef, id));
+    } catch (e) {
+        console.error('Error removing document: ', e);
+    }
+}
+
+// TODO: add update patient
