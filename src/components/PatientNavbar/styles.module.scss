@@ -1,0 +1,38 @@
+.patient-navbar {
+    width: 100%;
+    height: 70px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--background-color);
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        width: 90%;
+    }
+
+    &__name,
+    &__age {
+        color: var(--absolute-white);
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    &__age {
+        font-weight: 200;
+    }
+
+    &__buttons {
+        width: fit-content;
+        display: flex;
+        justify-content: space-between;
+        button {
+            margin: 0px 10px;
+        }
+    }
+}

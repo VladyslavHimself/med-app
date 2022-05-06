@@ -3,10 +3,9 @@ import ManIcon from '@mui/icons-material/Man';
 import WomanIcon from '@mui/icons-material/Woman';
 import { IPatient } from '../../interfaces/IPatient.interface';
 import { getDateByDefaultFormat } from '../../utils/date/date.service';
+import React from 'react';
 
-interface IProps extends IPatient {}
-
-function PatientCard({ name, surname, birthDate, gender }: IProps): JSX.Element {
+function PatientCard({ name, surname, birthDate, gender }: IPatient): JSX.Element {
     const iconStyles = {
         fill: '#f4f4f4',
         width: '45px',

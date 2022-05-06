@@ -1,21 +1,20 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IPatient } from '../../interfaces/IPatient.interface';
 import PatientCard from '../PatientCard/Component';
 import classes from './styles.module.scss';
 import HashLoader from 'react-spinners/HashLoader';
 
-function PatientsList(patients: any): JSX.Element {
-    const [patientsData, setPatientsData] = useState<{ patients: IPatient[] }>(patients);
+interface IProps {
+    patients: IPatient[] | undefined;
+    onPatientClickHandler: (patient: IPatient) => void;
+}
 
+function PatientsList({ patients, onPatientClickHandler }: IProps): JSX.Element {
+    const [patientsData, setPatientsData] = useState<IPatient[]>(patients!);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-        setIsLoading(false);
-    }, []);
-
-    useEffect(() => {
-        setPatientsData(patients);
-    }, [patients]);
+    useEffect(() => setIsLoading(false), []);
+    useEffect(() => setPatientsData(patients!), [patients]);
 
     return (
         <div className={classes['patients-list']}>
@@ -25,18 +24,21 @@ function PatientsList(patients: any): JSX.Element {
                 </div>
             ) : (
                 patientsData &&
-                patientsData.patients?.map((patient: IPatient) => {
+                patientsData.map((patient: IPatient) => {
                     return (
-                        <PatientCard
-                            key={patient.name + patient.surname + patient.birthDate + Math.random()}
-                            name={patient.name}
-                            surname={patient.surname}
-                            birthDate={patient.birthDate}
-                            gender={patient.gender}
-                            country={patient.country}
-                            address={patient.address}
-                            state={patient.state}
-                        />
+                        <div role="button" onClick={() => onPatientClickHandler(patient)}>
+                            <PatientCard
+                                key={patient.name + patient.surname + patient.birthDate + Math.random()}
+                                id={patient.id}
+                                name={patient.name}
+                                surname={patient.surname}
+                                birthDate={patient.birthDate}
+                                gender={patient.gender}
+                                country={patient.country}
+                                address={patient.address}
+                                state={patient.state}
+                            />
+                        </div>
                     );
                 })
             )}
