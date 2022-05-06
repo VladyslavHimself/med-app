@@ -13,7 +13,7 @@ export interface IPatient {
     name: string;
     surname: string;
 
-    birthDate: Date;
+    birthDate: Timestamp;
     gender: Gender;
 
     country: Country;

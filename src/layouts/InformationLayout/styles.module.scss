@@ -1,0 +1,11 @@
+.information-layout {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex: 3;
+
+    // border: 1px solid red;
+
+    background-color: var(--background-color-light);
+}

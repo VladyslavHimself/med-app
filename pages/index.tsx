@@ -6,7 +6,9 @@ import classes from '../scss/pages/index.module.scss';
 import PatientsList from '../src/components/PatientsList';
 import SearchField from '../src/components/SearchField';
 import { IPatient } from '../src/interfaces/IPatient.interface';
+import InformationLayout from '../src/layouts/InformationLayout/Component';
 import { addNewPatient, getPatients } from '../src/services/firebase/firebase.service';
+import { convertDateToTimestamp } from '../src/utils/date/date.service';
 
 const Home: NextPage = () => {
     const [patientsData, setPatientsData] = useState<IPatient[]>();
@@ -21,7 +23,7 @@ const Home: NextPage = () => {
         await addNewPatient({
             name: 'John',
             surname: 'Doe',
-            birthDate: new Date('01/01/2000'),
+            birthDate: convertDateToTimestamp(new Date('01/01/2000')),
             gender: 'male',
             country: 'USA',
             state: 'New Jersey',
@@ -32,10 +34,8 @@ const Home: NextPage = () => {
     };
 
     const filterPatients = patientsData?.filter((patient: IPatient) => {
-        return (
-            patient.name.toLowerCase().includes(searchInput.toLowerCase()) ||
-            patient.surname.toLowerCase().includes(searchInput.toLowerCase())
-        );
+        const fullname = `${patient.name} ${patient.surname}`;
+        return fullname.toLowerCase().includes(searchInput.toLowerCase());
     });
 
     useEffect(() => {
@@ -43,7 +43,7 @@ const Home: NextPage = () => {
     }, []);
 
     return (
-        <div>
+        <div className={classes['main-layout']}>
             <Head>
                 <title>VITech Med App</title>
             </Head>
@@ -64,6 +64,8 @@ const Home: NextPage = () => {
                     <PatientsList patients={filterPatients} />
                 </div>
             </div>
+
+            <InformationLayout />
         </div>
     );
 };
