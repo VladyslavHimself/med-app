@@ -12,3 +12,15 @@ export const getDateByDefaultFormat = (date: Timestamp): string => {
 export const convertDateToTimestamp = (date: Date): Timestamp => {
     return Timestamp.fromDate(date);
 };
+
+export const getAge = (date: Timestamp): string => {
+    const inputDate = date.toDate();
+    const today = new Date();
+    const birthDate = new Date(inputDate);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age.toString();
+};
