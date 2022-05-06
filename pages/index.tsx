@@ -25,7 +25,7 @@ const Home: NextPage = () => {
 
     useEffect(() => {
         fetchPatients();
-    }, []);
+    }, [patientsData]);
 
     const onAddNewPatientHandle = async (): Promise<void> => {
         await addNewPatient({
