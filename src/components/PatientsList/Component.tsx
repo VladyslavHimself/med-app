@@ -28,7 +28,7 @@ function PatientsList({ patients, onPatientClickHandler }: IProps): JSX.Element 
                     return (
                         <div role="button" onClick={() => onPatientClickHandler(patient)}>
                             <PatientCard
-                                key={patient.name + patient.surname + patient.birthDate + Math.random()}
+                                key={patient.id}
                                 id={patient.id}
                                 name={patient.name}
                                 surname={patient.surname}
