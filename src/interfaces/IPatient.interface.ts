@@ -9,7 +9,7 @@ export interface IComment {
 }
 
 export interface IPatient {
-    id?: number;
+    id: string;
     name: string;
     surname: string;
 

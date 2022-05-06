@@ -3,10 +3,11 @@ import { IPatient } from '../../interfaces/IPatient.interface';
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 
 export async function addNewPatient(patient: IPatient) {
-    const { name, surname, birthDate, gender, country, state, address, comments } = patient;
+    const { name, surname, birthDate, gender, country, state, address, comments, id } = patient;
 
     try {
         const docRef = await addDoc(collection(db, 'patients'), {
+            id,
             name,
             surname,
             birthDate,
