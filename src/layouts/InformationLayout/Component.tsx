@@ -1,11 +1,11 @@
 import classes from './styles.module.scss';
 
-function InformationLayout(): JSX.Element {
-    return (
-        <div className={classes['information-layout']}>
-            <h1>Im the information layout</h1>
-        </div>
-    );
+interface IProps {
+    children: React.ReactNode;
+}
+
+function InformationLayout({ children }: IProps): JSX.Element {
+    return <div className={classes['information-layout']}>{children}</div>;
 }
 
 export default InformationLayout;
