@@ -6,12 +6,7 @@ import { getDateByDefaultFormat } from '../../utils/date/date.service';
 
 interface IProps extends IPatient {}
 
-function PatientCard({
-    name,
-    surname,
-    birthDate,
-    gender,
-}: IProps): JSX.Element {
+function PatientCard({ name, surname, birthDate, gender }: IProps): JSX.Element {
     const iconStyles = {
         fill: '#f4f4f4',
         width: '45px',
@@ -24,16 +19,10 @@ function PatientCard({
                 <div className={classes['patient-data__fullname']}>
                     {name} {surname}
                 </div>
-                <div
-                    className={classes['patient-data__birth']}
-                >{`${getDateByDefaultFormat(birthDate)}`}</div>
+                <div className={classes['patient-data__birth']}>{`${getDateByDefaultFormat(birthDate)}`}</div>
             </div>
             <div className={classes['patient-card__avatar']}>
-                {gender === 'male' ? (
-                    <ManIcon sx={iconStyles} />
-                ) : (
-                    <WomanIcon sx={iconStyles} />
-                )}
+                {gender === 'male' ? <ManIcon sx={iconStyles} /> : <WomanIcon sx={iconStyles} />}
             </div>
         </div>
     );
