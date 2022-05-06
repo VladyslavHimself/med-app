@@ -11,6 +11,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { IPatient } from '../../interfaces/IPatient.interface';
 
 import { getAge } from '../../utils/date/date.service';
+import { deletePatient } from '../../services/firebase/firebase.service';
 
 function PatientNavbar({ selectedPatient }: any): JSX.Element {
     const [patient, setPatient] = useState<IPatient>();
@@ -22,7 +23,9 @@ function PatientNavbar({ selectedPatient }: any): JSX.Element {
     return (
         <div className={classes['patient-navbar']}>
             <div className={classes.container}>
-                <div className={classes['patient-navbar__name']}>{patient && `${patient.name} ${patient.surname}`}</div>
+                <div className={classes['patient-navbar__name']}>
+                    {patient && `${patient.name}  ${patient.surname}`}
+                </div>
                 <div className={classes['patient-navbar__age']}>
                     {patient && `${getAge(patient.birthDate)} years old`}
                 </div>
@@ -31,7 +34,12 @@ function PatientNavbar({ selectedPatient }: any): JSX.Element {
                     <Button endIcon={<EditIcon />} variant="contained" color="warning">
                         Edit
                     </Button>
-                    <Button endIcon={<DeleteIcon />} variant="contained" color="error">
+                    <Button
+                        onClick={() => deletePatient(patient?.id)}
+                        endIcon={<DeleteIcon />}
+                        variant="contained"
+                        color="error"
+                    >
                         Delete
                     </Button>
                 </div>
