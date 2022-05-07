@@ -3,7 +3,6 @@ import classes from './styles.module.scss';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     buttonValue: string;
-    textFieldValue?: string;
     inputState: string;
     setInputState: React.Dispatch<React.SetStateAction<string>>;
     onButtonClickHandler: () => void;
@@ -14,21 +13,12 @@ const inputStyles = {
     label: { color: '#fff' },
 };
 
-function SearchField({
-    buttonValue,
-
-    textFieldValue,
-    onButtonClickHandler,
-    inputState,
-    setInputState,
-
-    ...props
-}: IProps): JSX.Element {
+function ControlForms({ buttonValue, onButtonClickHandler, inputState, setInputState, ...props }: IProps): JSX.Element {
     return (
         <div className={classes['search-field']} {...props}>
             <TextField
                 sx={inputStyles}
-                label={textFieldValue}
+                label={'Search'}
                 variant="standard"
                 value={inputState}
                 onChange={(e): void => setInputState(e.target.value)}
@@ -40,8 +30,4 @@ function SearchField({
     );
 }
 
-export default SearchField;
-
-SearchField.defaultProps = {
-    textFieldValue: 'Search',
-};
+export default ControlForms;
