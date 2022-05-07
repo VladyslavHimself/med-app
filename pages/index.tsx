@@ -8,10 +8,12 @@ import { IPatient } from '../src/interfaces/IPatient.interface';
 import InformationLayout from '../src/layouts/InformationLayout/Component';
 import PatientNavbar from '../src/components/PatientNavbar/Component';
 import PatientsList from '../src/components/PatientsList';
-import SearchField from '../src/components/SearchField';
+import ControlForms from '../src/components/ControlForms';
 
 import { convertDateToTimestamp } from '../src/utils/date/date.service';
 import PatientMedicalBook from '../src/components/PatientMedicalBook/Component';
+import PatientJournal from '../src/components/PatientJournal/Component';
+import Sidebar from '../src/layouts/Sidebar/Component';
 
 const Home: NextPage = () => {
     const [patientsData, setPatientsData] = useState<IPatient[]>();
@@ -23,6 +25,11 @@ const Home: NextPage = () => {
         setPatientsData(patients);
         setSelectedPatient(patients[0]);
     };
+
+    const filterPatients = patientsData?.filter((patient: IPatient) => {
+        const fullname = `${patient.name} ${patient.surname}`;
+        return fullname.toLowerCase().includes(searchInput.toLowerCase());
+    });
 
     useEffect(() => {
         fetchPatients();
@@ -43,14 +50,9 @@ const Home: NextPage = () => {
         await fetchPatients();
     };
 
-    const onSelectPatientHandle = (patient: IPatient) => {
+    const onSelectPatientHandle = (patient: IPatient): void => {
         setSelectedPatient(patient);
     };
-
-    const filterPatients = patientsData?.filter((patient: IPatient) => {
-        const fullname = `${patient.name} ${patient.surname}`;
-        return fullname.toLowerCase().includes(searchInput.toLowerCase());
-    });
 
     return (
         <div className={classes['main-layout']}>
@@ -58,26 +60,26 @@ const Home: NextPage = () => {
                 <title>VITech Med App</title>
             </Head>
 
-            <div className={classes.contacts}>
-                <div className={classes.container}>
-                    <div className={classes['search-patient']}>
-                        <SearchField
-                            buttonValue="New Patient"
-                            inputState={searchInput}
-                            setInputState={setSearchInput}
-                            onButtonClickHandler={onAddNewPatientHandle}
-                        />
-                    </div>
-
-                    <hr />
-
-                    <PatientsList onPatientClickHandler={onSelectPatientHandle} patients={filterPatients} />
+            <Sidebar>
+                <div className={classes['search-patient']}>
+                    <ControlForms
+                        buttonValue="New Patient"
+                        inputState={searchInput}
+                        setInputState={setSearchInput}
+                        onButtonClickHandler={onAddNewPatientHandle}
+                    />
                 </div>
-            </div>
 
+                <hr />
+
+                <PatientsList onPatientClickHandler={onSelectPatientHandle} patients={filterPatients} />
+            </Sidebar>
             <InformationLayout>
                 <PatientNavbar selectedPatient={selectedPatient} fetch={fetchPatients} />
-                <PatientMedicalBook selectedPatient={selectedPatient} />
+                <div className={classes['information-container']}>
+                    <PatientMedicalBook selectedPatient={selectedPatient} />
+                    <PatientJournal selectedPatient={selectedPatient} />
+                </div>
             </InformationLayout>
         </div>
     );
