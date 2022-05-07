@@ -1,0 +1,14 @@
+.intformation-description {
+    width: 300px;
+    height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+
+    &__item {
+        margin: 10px 25px;
+        font-size: large;
+        text-align: left;
+    }
+}
