@@ -1,0 +1,15 @@
+.comment {
+    &__date {
+        font-size: 1rem;
+        font-weight: 800;
+    }
+
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.281);
+    margin-top: 10px;
+
+    &__content {
+        font-weight: normal;
+        letter-spacing: 1px;
+    }
+}
