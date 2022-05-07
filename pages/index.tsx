@@ -11,6 +11,7 @@ import PatientsList from '../src/components/PatientsList';
 import SearchField from '../src/components/SearchField';
 
 import { convertDateToTimestamp } from '../src/utils/date/date.service';
+import PatientMedicalBook from '../src/components/PatientMedicalBook/Component';
 
 const Home: NextPage = () => {
     const [patientsData, setPatientsData] = useState<IPatient[]>();
@@ -25,7 +26,7 @@ const Home: NextPage = () => {
 
     useEffect(() => {
         fetchPatients();
-    }, [patientsData]);
+    }, []);
 
     const onAddNewPatientHandle = async (): Promise<void> => {
         await addNewPatient({
@@ -75,7 +76,8 @@ const Home: NextPage = () => {
             </div>
 
             <InformationLayout>
-                <PatientNavbar selectedPatient={selectedPatient} />
+                <PatientNavbar selectedPatient={selectedPatient} fetch={fetchPatients} />
+                <PatientMedicalBook selectedPatient={selectedPatient} />
             </InformationLayout>
         </div>
     );
