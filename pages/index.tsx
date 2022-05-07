@@ -2,18 +2,17 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import classes from '../scss/pages/index.module.scss';
 import { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { addNewPatient, getPatients } from '../src/services/firebase/firebase.service';
+import { convertDateToTimestamp } from '../src/utils/date/date.service';
 import { IPatient } from '../src/interfaces/IPatient.interface';
-import InformationLayout from '../src/layouts/InformationLayout/Component';
-import PatientNavbar from '../src/components/PatientNavbar/Component';
+import InformationLayout from '../src/layouts/InformationLayout';
+import PatientNavbar from '../src/components/PatientNavbar';
 import PatientsList from '../src/components/PatientsList';
 import ControlForms from '../src/components/ControlForms';
 
-import { convertDateToTimestamp } from '../src/utils/date/date.service';
-import PatientMedicalBook from '../src/components/PatientMedicalBook/Component';
-import PatientJournal from '../src/components/PatientJournal/Component';
-import Sidebar from '../src/layouts/Sidebar/Component';
+import PatientMedicalBook from '../src/components/PatientMedicalBook';
+import PatientJournal from '../src/components/PatientJournal';
+import Sidebar from '../src/layouts/Sidebar';
 
 const Home: NextPage = () => {
     const [patientsData, setPatientsData] = useState<IPatient[]>();
@@ -37,7 +36,7 @@ const Home: NextPage = () => {
 
     const onAddNewPatientHandle = async (): Promise<void> => {
         await addNewPatient({
-            id: uuidv4(),
+            id: '',
             name: 'John',
             surname: 'Doe',
             birthDate: convertDateToTimestamp(new Date('01/01/2000')),
