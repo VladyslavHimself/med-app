@@ -13,12 +13,17 @@ import { IPatient } from '../../interfaces/IPatient.interface';
 import { getAge } from '../../utils/date/date.service';
 import { deletePatient } from '../../services/firebase/firebase.service';
 
-function PatientNavbar({ selectedPatient }: any): JSX.Element {
+function PatientNavbar({ selectedPatient, fetch }: any): JSX.Element {
     const [patient, setPatient] = useState<IPatient>();
 
     useEffect(() => {
         setPatient(() => selectedPatient);
     }, [selectedPatient]);
+
+    const onDeletePatientHandle = async () => {
+        deletePatient(patient?.id);
+        fetch();
+    };
 
     return (
         <div className={classes['patient-navbar']}>
@@ -34,12 +39,7 @@ function PatientNavbar({ selectedPatient }: any): JSX.Element {
                     <Button endIcon={<EditIcon />} variant="contained" color="warning">
                         Edit
                     </Button>
-                    <Button
-                        onClick={() => deletePatient(patient?.id)}
-                        endIcon={<DeleteIcon />}
-                        variant="contained"
-                        color="error"
-                    >
+                    <Button onClick={onDeletePatientHandle} endIcon={<DeleteIcon />} variant="contained" color="error">
                         Delete
                     </Button>
                 </div>
