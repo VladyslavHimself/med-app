@@ -1,6 +1,8 @@
 .journal-container {
     width: 100%;
 
+    height: 600px;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,10 +29,18 @@
         color: var(--absolute-white);
         letter-spacing: 3px;
     }
+
     &__comments {
         height: 70%;
         flex: 1;
-        overflow: auto;
+        overflow: scroll;
+
+        margin-left: 25px;
+
+        color: var(--absolute-white);
+        font-weight: 200;
+        text-align: justify;
+        max-width: 90%;
     }
 
     &__input-field {
