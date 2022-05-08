@@ -5,16 +5,16 @@ import classes from './styles.module.scss';
 import HashLoader from 'react-spinners/HashLoader';
 
 interface IProps {
-    patients: IPatient[] | undefined;
+    patients: () => IPatient[] | undefined;
     onPatientClickHandler: (patient: IPatient) => void;
 }
 
 function PatientsList({ patients, onPatientClickHandler }: IProps): JSX.Element {
-    const [patientsData, setPatientsData] = useState<IPatient[]>(patients!);
+    const [patientsData, setPatientsData] = useState<IPatient[]>(patients);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => setIsLoading(false), []);
-    useEffect(() => setPatientsData(patients!), [patients]);
+    useEffect(() => setPatientsData(patients), [patients]);
 
     return (
         <div className={classes['patients-list']}>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import classes from './styles.module.scss';
 
@@ -12,16 +12,16 @@ import { IPatient } from '../../interfaces/IPatient.interface';
 
 import { getAge } from '../../utils/date/date.service';
 import { deletePatient } from '../../services/firebase/firebase.service';
+import { InformationContext } from '../../context';
 
-function PatientNavbar({
-    selectedPatient,
-    fetch,
-    isEditMenu,
-    onToggleEditHandler,
-    onUpdatePatientHandler,
-    informationState,
-}: any): JSX.Element {
+function PatientNavbar(): JSX.Element {
     const [patient, setPatient] = useState<IPatient>();
+
+    const { fetchPatients, selectedPatient, informationState, setInformationState, onUpdatePatientHandle } =
+        useContext(InformationContext);
+
+    const onToggleEditHandler = (): void => setInformationState('EditPatient');
+    const onToggleViewWindowHandle = (): void => setInformationState('ViewPatient');
 
     useEffect(() => {
         setPatient(() => selectedPatient);
@@ -29,7 +29,7 @@ function PatientNavbar({
 
     const onDeletePatientHandle = async () => {
         deletePatient(patient?.id);
-        fetch();
+        fetchPatients();
     };
 
     return (
@@ -39,7 +39,7 @@ function PatientNavbar({
                     {patient && `${patient.name}  ${patient.surname}`}
                 </div>
 
-                {!isEditMenu && (
+                {informationState === 'ViewPatient' && (
                     <div className={classes['patient-navbar__age']}>
                         {patient && `${getAge(patient.birthDate)} years old`}
                     </div>
@@ -49,7 +49,7 @@ function PatientNavbar({
                     {informationState === 'EditPatient' && (
                         <>
                             <Button
-                                onClick={onUpdatePatientHandler}
+                                onClick={onUpdatePatientHandle}
                                 endIcon={<SaveIcon />}
                                 variant="contained"
                                 color="success"
@@ -58,7 +58,7 @@ function PatientNavbar({
                             </Button>
 
                             <Button
-                                onClick={onToggleEditHandler}
+                                onClick={onToggleViewWindowHandle}
                                 endIcon={<CloseIcon />}
                                 variant="contained"
                                 color="secondary"

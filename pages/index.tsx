@@ -6,25 +6,21 @@ import { addNewPatient, getPatients, updatePatient } from '../src/services/fireb
 import { convertDateToTimestamp } from '../src/utils/date/date.service';
 import { IPatient } from '../src/interfaces/IPatient.interface';
 import InformationLayout from '../src/layouts/InformationLayout';
-import PatientNavbar from '../src/components/PatientNavbar';
 import PatientsList from '../src/components/PatientsList';
-import ControlForms from '../src/components/ControlForms';
-
 import PatientMedicalBook from '../src/components/PatientMedicalBook';
 import PatientJournal from '../src/components/PatientJournal';
 import Sidebar from '../src/layouts/Sidebar';
 import { Button, Input } from '@mui/material';
-
-type InformationStateType = 'AddPatient' | 'EditPatient' | 'ViewPatient';
+import { InformationStateType } from '../src/types/general.types';
+import { InformationContext } from '../src/context';
 
 const Home: NextPage = () => {
     const [patientsData, setPatientsData] = useState<IPatient[]>();
     const [selectedPatient, setSelectedPatient] = useState<IPatient>();
-    const [searchInput, setSearchInput] = useState<string>('');
-    const [editablePatientData, setEditablePatientData] = useState<any>({});
-    const [newPatientData, setNewPatientData] = useState<any>({});
-
     const [informationState, setInformationState] = useState<InformationStateType>('ViewPatient');
+    const [searchInput, setSearchInput] = useState<string>('');
+    const [editablePatientData, setEditablePatientData] = useState<any>();
+    const [newPatientData, setNewPatientData] = useState<any>();
 
     const fetchPatients = async (): Promise<void> => {
         const patients: IPatient[] = await getPatients();
@@ -32,69 +28,58 @@ const Home: NextPage = () => {
         setSelectedPatient(patients[0]);
     };
 
-    const filterPatients = patientsData?.filter((patient: IPatient) => {
-        const fullname = `${patient.name} ${patient.surname}`;
-        return fullname.toLowerCase().includes(searchInput.toLowerCase());
-    });
+    const filterPatients = (): IPatient[] | undefined =>
+        patientsData?.filter((patient: IPatient) => {
+            const fullname = `${patient.name} ${patient.surname}`;
+            return fullname.toLowerCase().includes(searchInput.toLowerCase());
+        });
 
     useEffect(() => {
         fetchPatients();
     }, []);
 
-    const onAddNewPatientHandle = async (): Promise<void> => {
-        setInformationState('AddPatient');
-    };
-
-    const onSelectPatientHandle = (patient: IPatient): void => {
-        setSelectedPatient(patient);
-    };
+    const onSelectPatientHandle = (patient: IPatient): void => setSelectedPatient(patient);
 
     const onUpdatePatientHandle = (): void => {
         updatePatient(selectedPatient?.id, selectedPatient!, editablePatientData);
-        setInformationState('EditPatient');
+        setInformationState('ViewPatient');
         fetchPatients();
     };
 
-    const onCreateNewPatientHandle = (): void => {
+    const onCreatePatientHandle = (): void => {
         addNewPatient(newPatientData);
         fetchPatients();
         setInformationState('ViewPatient');
     };
 
-    const onToggleEditPatientHandle = (): void => setIsEditingPatient((prevState) => !prevState);
+    const onSwitchStateToPatientAddHandle = (): void => setInformationState('AddPatient');
 
     return (
-        <div className={classes['main-layout']}>
+        <div className={classes.wrapper}>
             <Head>
                 <title>VITech Med App</title>
             </Head>
 
-            <Sidebar>
-                <div className={classes['search-patient']}>
-                    <ControlForms
-                        buttonValue="New Patient"
-                        inputState={searchInput}
-                        setInputState={setSearchInput}
-                        onButtonClickHandler={onAddNewPatientHandle}
-                    />
-                </div>
-
-                <hr />
-
+            <Sidebar
+                searchInput={searchInput}
+                setSearchInput={setSearchInput}
+                onButtonClickHandler={onSwitchStateToPatientAddHandle}
+            >
                 <PatientsList onPatientClickHandler={onSelectPatientHandle} patients={filterPatients} />
             </Sidebar>
-            <InformationLayout>
-                <PatientNavbar
-                    informationState={informationState}
-                    onToggleEditHandler={onToggleEditPatientHandle}
-                    onUpdatePatientHandler={onUpdatePatientHandle}
-                    selectedPatient={selectedPatient}
-                    fetch={fetchPatients}
-                />
-
-                {informationState === 'EditPatient' && (
-                    <div className={classes['information-container']}>
-                        <div className={classes['edit-patient']}>
+            <InformationContext.Provider
+                value={{
+                    informationState,
+                    setInformationState,
+                    selectedPatient,
+                    fetchPatients,
+                    onCreatePatientHandle,
+                    onUpdatePatientHandle,
+                }}
+            >
+                <InformationLayout>
+                    {informationState === 'EditPatient' && (
+                        <div className={classes['edit-field']}>
                             <Input
                                 onChange={(e) =>
                                     setEditablePatientData({
@@ -108,37 +93,35 @@ const Home: NextPage = () => {
                                 onChange={(e) =>
                                     setEditablePatientData({ ...editablePatientData, gender: e.target.value })
                                 }
-                                value={editablePatientData.gender}
+                                value={editablePatientData?.gender}
                                 placeholder="Sex"
                             />
                             <Input
                                 onChange={(e) =>
                                     setEditablePatientData({ ...editablePatientData, country: e.target.value })
                                 }
-                                value={editablePatientData.country}
+                                value={editablePatientData?.country}
                                 placeholder="Country"
                             />
                             <Input
                                 onChange={(e) =>
                                     setEditablePatientData({ ...editablePatientData, state: e.target.value })
                                 }
-                                value={editablePatientData.state}
+                                value={editablePatientData?.state}
                                 placeholder="State"
                             />
                             <Input
                                 onChange={(e) =>
                                     setEditablePatientData({ ...editablePatientData, address: e.target.value })
                                 }
-                                value={editablePatientData.address}
+                                value={editablePatientData?.address}
                                 placeholder="Address"
                             />
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {informationState === 'AddPatient' && (
-                    <div className={classes['information-container']}>
-                        <div className={classes['add-patient']}>
+                    {informationState === 'AddPatient' && (
+                        <div className={classes['edit-field']}>
                             <Input
                                 onChange={(e) => setNewPatientData({ ...newPatientData, name: e.target.value })}
                                 placeholder="Name"
@@ -173,20 +156,28 @@ const Home: NextPage = () => {
                                 placeholder="Address"
                             />
 
-                            <Button onClick={onCreateNewPatientHandle}>Add Patient</Button>
+                            <Button onClick={onCreatePatientHandle}>Add Patient</Button>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {informationState === 'ViewPatient' && (
-                    <div className={classes['information-container']}>
-                        <PatientMedicalBook selectedPatient={selectedPatient} />
-                        <PatientJournal selectedPatient={selectedPatient} fetchData={fetchPatients} />
-                    </div>
-                )}
-            </InformationLayout>
+                    {informationState === 'ViewPatient' && (
+                        <>
+                            <PatientMedicalBook selectedPatient={selectedPatient} />
+                            <PatientJournal selectedPatient={selectedPatient} fetchData={fetchPatients} />
+                        </>
+                    )}
+                </InformationLayout>
+            </InformationContext.Provider>
         </div>
     );
 };
 
 export default Home;
+
+// Винести в окремий хук
+
+// const [fetchPatients, isLoading, error] = useFetch(async () => {
+//     const patients: IPatient[] = await getPatients();
+//     setPatientsData(patients);
+//     setSelectedPatient(patients[0]);
+// });
