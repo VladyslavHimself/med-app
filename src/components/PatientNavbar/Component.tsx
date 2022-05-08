@@ -19,6 +19,7 @@ function PatientNavbar({
     isEditMenu,
     onToggleEditHandler,
     onUpdatePatientHandler,
+    informationState,
 }: any): JSX.Element {
     const [patient, setPatient] = useState<IPatient>();
 
@@ -45,7 +46,7 @@ function PatientNavbar({
                 )}
 
                 <div className={classes['patient-navbar__buttons']}>
-                    {isEditMenu ? (
+                    {informationState === 'EditPatient' && (
                         <>
                             <Button
                                 onClick={onUpdatePatientHandler}
@@ -74,7 +75,9 @@ function PatientNavbar({
                                 Delete
                             </Button>
                         </>
-                    ) : (
+                    )}
+
+                    {informationState === 'ViewPatient' && (
                         <>
                             <Button
                                 onClick={onToggleEditHandler}

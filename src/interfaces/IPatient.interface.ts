@@ -1,7 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 
 type Gender = 'male' | 'female';
-type Country = 'USA' | 'Canada' | 'Ukraine';
 
 export interface IComment {
     date: Timestamp;
@@ -9,14 +8,14 @@ export interface IComment {
 }
 
 export interface IPatient {
-    id: string;
+    id?: string;
     name: string;
     surname: string;
 
     birthDate: Timestamp;
     gender: Gender;
 
-    country: Country;
+    country: string;
     state: string;
     address: string;
 

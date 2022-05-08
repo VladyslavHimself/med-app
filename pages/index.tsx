@@ -13,15 +13,18 @@ import ControlForms from '../src/components/ControlForms';
 import PatientMedicalBook from '../src/components/PatientMedicalBook';
 import PatientJournal from '../src/components/PatientJournal';
 import Sidebar from '../src/layouts/Sidebar';
-import { Input } from '@mui/material';
-import { Timestamp } from 'firebase/firestore';
+import { Button, Input } from '@mui/material';
+
+type InformationStateType = 'AddPatient' | 'EditPatient' | 'ViewPatient';
 
 const Home: NextPage = () => {
     const [patientsData, setPatientsData] = useState<IPatient[]>();
     const [selectedPatient, setSelectedPatient] = useState<IPatient>();
     const [searchInput, setSearchInput] = useState<string>('');
-    const [isEditingPatient, setIsEditingPatient] = useState<boolean>(false);
     const [editablePatientData, setEditablePatientData] = useState<any>({});
+    const [newPatientData, setNewPatientData] = useState<any>({});
+
+    const [informationState, setInformationState] = useState<InformationStateType>('ViewPatient');
 
     const fetchPatients = async (): Promise<void> => {
         const patients: IPatient[] = await getPatients();
@@ -39,18 +42,7 @@ const Home: NextPage = () => {
     }, []);
 
     const onAddNewPatientHandle = async (): Promise<void> => {
-        await addNewPatient({
-            id: '',
-            name: 'John',
-            surname: 'Doe',
-            birthDate: convertDateToTimestamp(new Date('01/01/2000')),
-            gender: 'male',
-            country: 'USA',
-            state: 'New Jersey',
-            address: '114 Fairview Ave',
-            comments: [],
-        });
-        await fetchPatients();
+        setInformationState('AddPatient');
     };
 
     const onSelectPatientHandle = (patient: IPatient): void => {
@@ -59,8 +51,14 @@ const Home: NextPage = () => {
 
     const onUpdatePatientHandle = (): void => {
         updatePatient(selectedPatient?.id, selectedPatient!, editablePatientData);
-        setIsEditingPatient(false);
+        setInformationState('EditPatient');
         fetchPatients();
+    };
+
+    const onCreateNewPatientHandle = (): void => {
+        addNewPatient(newPatientData);
+        fetchPatients();
+        setInformationState('ViewPatient');
     };
 
     const onToggleEditPatientHandle = (): void => setIsEditingPatient((prevState) => !prevState);
@@ -87,21 +85,21 @@ const Home: NextPage = () => {
             </Sidebar>
             <InformationLayout>
                 <PatientNavbar
-                    isEditMenu={isEditingPatient}
+                    informationState={informationState}
                     onToggleEditHandler={onToggleEditPatientHandle}
                     onUpdatePatientHandler={onUpdatePatientHandle}
                     selectedPatient={selectedPatient}
                     fetch={fetchPatients}
                 />
 
-                {isEditingPatient ? (
+                {informationState === 'EditPatient' && (
                     <div className={classes['information-container']}>
                         <div className={classes['edit-patient']}>
                             <Input
                                 onChange={(e) =>
                                     setEditablePatientData({
                                         ...editablePatientData,
-                                        birthDate: new Date(e.target.value),
+                                        birthDate: convertDateToTimestamp(new Date(e.target.value)),
                                     })
                                 }
                                 placeholder="Date of Birth"
@@ -136,7 +134,51 @@ const Home: NextPage = () => {
                             />
                         </div>
                     </div>
-                ) : (
+                )}
+
+                {informationState === 'AddPatient' && (
+                    <div className={classes['information-container']}>
+                        <div className={classes['add-patient']}>
+                            <Input
+                                onChange={(e) => setNewPatientData({ ...newPatientData, name: e.target.value })}
+                                placeholder="Name"
+                            />
+                            <Input
+                                onChange={(e) => setNewPatientData({ ...newPatientData, surname: e.target.value })}
+                                placeholder="Surname"
+                            />
+                            <Input
+                                onChange={(e) =>
+                                    setNewPatientData({ ...newPatientData, birthDate: new Date(e.target.value) })
+                                }
+                                placeholder="Date of Birth"
+                            />
+                            <Input
+                                onChange={(e) => setNewPatientData({ ...newPatientData, gender: e.target.value })}
+                                placeholder="Sex"
+                            />
+
+                            <Input
+                                onChange={(e) => setNewPatientData({ ...newPatientData, country: e.target.value })}
+                                placeholder="Country"
+                            />
+
+                            <Input
+                                onChange={(e) => setNewPatientData({ ...newPatientData, state: e.target.value })}
+                                placeholder="State"
+                            />
+
+                            <Input
+                                onChange={(e) => setNewPatientData({ ...newPatientData, address: e.target.value })}
+                                placeholder="Address"
+                            />
+
+                            <Button onClick={onCreateNewPatientHandle}>Add Patient</Button>
+                        </div>
+                    </div>
+                )}
+
+                {informationState === 'ViewPatient' && (
                     <div className={classes['information-container']}>
                         <PatientMedicalBook selectedPatient={selectedPatient} />
                         <PatientJournal selectedPatient={selectedPatient} fetchData={fetchPatients} />
