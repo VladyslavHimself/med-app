@@ -1,6 +1,6 @@
 import { firestoreDb as db } from '../../configs/firebase';
 import { IPatient } from '../../interfaces/IPatient.interface';
-import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, updateDoc, doc, getDocs } from 'firebase/firestore';
 
 const patientsCollectionRef = collection(db, 'patients');
 
@@ -45,3 +45,12 @@ export async function deletePatient(id: string | undefined) {
 }
 
 // TODO: add update patient
+
+export async function updatePatient(id: string | undefined, userData: IPatient, updatedData: any) {
+    if (!id) console.error('No id provided');
+
+    const userDoc = doc(db, 'patients', id!);
+
+    const newData = { ...userData, ...updatedData };
+    await updateDoc(userDoc, newData);
+}

@@ -13,7 +13,13 @@ import { IPatient } from '../../interfaces/IPatient.interface';
 import { getAge } from '../../utils/date/date.service';
 import { deletePatient } from '../../services/firebase/firebase.service';
 
-function PatientNavbar({ selectedPatient, fetch }: any): JSX.Element {
+function PatientNavbar({
+    selectedPatient,
+    fetch,
+    isEditMenu,
+    onToggleEditHandler,
+    onUpdatePatientHandler,
+}: any): JSX.Element {
     const [patient, setPatient] = useState<IPatient>();
 
     useEffect(() => {
@@ -31,17 +37,63 @@ function PatientNavbar({ selectedPatient, fetch }: any): JSX.Element {
                 <div className={classes['patient-navbar__name']}>
                     {patient && `${patient.name}  ${patient.surname}`}
                 </div>
-                <div className={classes['patient-navbar__age']}>
-                    {patient && `${getAge(patient.birthDate)} years old`}
-                </div>
+
+                {!isEditMenu && (
+                    <div className={classes['patient-navbar__age']}>
+                        {patient && `${getAge(patient.birthDate)} years old`}
+                    </div>
+                )}
 
                 <div className={classes['patient-navbar__buttons']}>
-                    <Button endIcon={<EditIcon />} variant="contained" color="warning">
-                        Edit
-                    </Button>
-                    <Button onClick={onDeletePatientHandle} endIcon={<DeleteIcon />} variant="contained" color="error">
-                        Delete
-                    </Button>
+                    {isEditMenu ? (
+                        <>
+                            <Button
+                                onClick={onUpdatePatientHandler}
+                                endIcon={<SaveIcon />}
+                                variant="contained"
+                                color="success"
+                            >
+                                Save
+                            </Button>
+
+                            <Button
+                                onClick={onToggleEditHandler}
+                                endIcon={<CloseIcon />}
+                                variant="contained"
+                                color="secondary"
+                            >
+                                Cancel
+                            </Button>
+
+                            <Button
+                                onClick={onDeletePatientHandle}
+                                endIcon={<DeleteIcon />}
+                                variant="contained"
+                                color="error"
+                            >
+                                Delete
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button
+                                onClick={onToggleEditHandler}
+                                endIcon={<EditIcon />}
+                                variant="contained"
+                                color="warning"
+                            >
+                                Edit
+                            </Button>
+                            <Button
+                                onClick={onDeletePatientHandle}
+                                endIcon={<DeleteIcon />}
+                                variant="contained"
+                                color="error"
+                            >
+                                Delete
+                            </Button>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
