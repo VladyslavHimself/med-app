@@ -40,7 +40,7 @@ function PatientJournal() {
                 <div className={classes.journal__comments}>
                     {selectedPatient?.comments?.length ? (
                         selectedPatient.comments
-                            .map((comment: IComment, index: number) => (
+                            .map((comment: IComment) => (
                                 <Comment
                                     key={comment.comment + Math.random() * 20}
                                     content={comment.comment}
@@ -49,7 +49,9 @@ function PatientJournal() {
                             ))
                             .reverse()
                     ) : (
-                        <h3>No comments :(</h3>
+                        <div className={classes.wrapper}>
+                            <span>No comments :(</span>
+                        </div>
                     )}
                 </div>
                 <div className={classes['journal__input-field']}>
