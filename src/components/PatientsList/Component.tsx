@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+
 import { IPatient } from '../../interfaces/IPatient.interface';
 import PatientCard from '../PatientCard/Component';
 import classes from './styles.module.scss';
@@ -16,6 +18,22 @@ function PatientsList({ patients, onPatientClickHandler }: IProps): JSX.Element 
     useEffect(() => setIsLoading(false), []);
     useEffect(() => setPatientsData(patients), [patients]);
 
+    const cardVariants = {
+        hidden: {
+            opacity: 0,
+            x: -10,
+        },
+        visible: (i: number) => ({
+            opacity: 1,
+            x: 0,
+            transition: {
+                delay: 0.3 * i,
+                duration: 1,
+                type: 'spring',
+            },
+        }),
+    };
+
     return (
         <div className={classes['patients-list']}>
             {isLoading ? (
@@ -24,11 +42,18 @@ function PatientsList({ patients, onPatientClickHandler }: IProps): JSX.Element 
                 </div>
             ) : (
                 patientsData &&
-                patientsData.map((patient: IPatient) => {
+                patientsData.map((patient: IPatient, index: number) => {
                     return (
-                        <div role="button" onClick={() => onPatientClickHandler(patient)}>
+                        <motion.div
+                            key={patient.id}
+                            variants={cardVariants}
+                            initial="hidden"
+                            animate="visible"
+                            custom={index}
+                            role="button"
+                            onClick={() => onPatientClickHandler(patient)}
+                        >
                             <PatientCard
-                                key={patient.id}
                                 id={patient.id}
                                 name={patient.name}
                                 surname={patient.surname}
@@ -38,7 +63,7 @@ function PatientsList({ patients, onPatientClickHandler }: IProps): JSX.Element 
                                 address={patient.address}
                                 state={patient.state}
                             />
-                        </div>
+                        </motion.div>
                     );
                 })
             )}

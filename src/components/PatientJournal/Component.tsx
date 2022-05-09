@@ -40,7 +40,13 @@ function PatientJournal() {
                 <div className={classes.journal__comments}>
                     {selectedPatient?.comments?.length ? (
                         selectedPatient.comments
-                            .map((comment: IComment) => <Comment content={comment.comment} date={comment.date} />)
+                            .map((comment: IComment, index: number) => (
+                                <Comment
+                                    key={comment.comment + Math.random() * 20}
+                                    content={comment.comment}
+                                    date={comment.date}
+                                />
+                            ))
                             .reverse()
                     ) : (
                         <h3>No comments :(</h3>
