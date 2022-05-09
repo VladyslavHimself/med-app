@@ -16,6 +16,7 @@ export async function addNewPatient(patient: IPatient) {
             country,
             state,
             address,
+            comments,
         });
         console.log('Document written with ID: ', docRef.id);
     } catch (e) {

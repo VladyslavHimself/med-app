@@ -1,18 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
-
 import classes from './styles.module.scss';
+
+import { IPatient } from '../../interfaces/IPatient.interface';
+import { getAge } from '../../utils/date/date.service';
+import { deletePatient } from '../../services/firebase/firebase.service';
+import { InformationContext } from '../../context';
 
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
-
-import { IPatient } from '../../interfaces/IPatient.interface';
-
-import { getAge } from '../../utils/date/date.service';
-import { deletePatient } from '../../services/firebase/firebase.service';
-import { InformationContext } from '../../context';
 
 function PatientNavbar(): JSX.Element {
     const [patient, setPatient] = useState<IPatient>();
@@ -36,7 +34,7 @@ function PatientNavbar(): JSX.Element {
         <div className={classes['patient-navbar']}>
             <div className={classes.container}>
                 <div className={classes['patient-navbar__name']}>
-                    {patient && `${patient.name}  ${patient.surname}`}
+                    {informationState !== 'AddPatient' && patient && `${patient.name}  ${patient.surname}`}
                 </div>
 
                 {informationState === 'ViewPatient' && (
@@ -94,6 +92,19 @@ function PatientNavbar(): JSX.Element {
                                 color="error"
                             >
                                 Delete
+                            </Button>
+                        </>
+                    )}
+
+                    {informationState === 'AddPatient' && (
+                        <>
+                            <Button
+                                onClick={onToggleViewWindowHandle}
+                                endIcon={<CloseIcon />}
+                                variant="contained"
+                                color="secondary"
+                            >
+                                Cancel
                             </Button>
                         </>
                     )}

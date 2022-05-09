@@ -3,8 +3,9 @@ import SendIcon from '@mui/icons-material/Send';
 import classes from './styles.module.scss';
 import Comment from '../Comment/Component';
 import { IComment } from '../../interfaces/IPatient.interface';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { updatePatient } from '../../services/firebase/firebase.service';
+import { InformationContext } from '../../context';
 
 const inputStyles = {
     input: { color: '#fff' },
@@ -13,19 +14,22 @@ const inputStyles = {
 
 // #TODO: need textField comopnent scalability
 
-function PatientJournal({ selectedPatient, fetchData }: any) {
+function PatientJournal() {
     const [commentInput, setCommentInput] = useState<string>('');
+
+    const { fetchPatients, selectedPatient } = useContext(InformationContext);
 
     const onAddCommentHandle = (): void => {
         if (commentInput.length) {
-            setCommentInput('');
-
             const upd = {
                 ...selectedPatient,
                 comments: [...selectedPatient.comments, { comment: commentInput, date: new Date() }],
             };
+
+            setCommentInput('');
+
             updatePatient(selectedPatient.id, selectedPatient, upd);
-            fetchData();
+            fetchPatients();
         }
     };
 

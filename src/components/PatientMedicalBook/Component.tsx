@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { InformationContext } from '../../context';
 import { IPatient } from '../../interfaces/IPatient.interface';
 import DetailedInformationLayout from '../../layouts/DetailedInformationLayout/Component';
 import { getDateByDefaultFormat } from '../../utils/date/date.service';
 import classes from './styles.module.scss';
 
-function PatientMedicalBook({ selectedPatient }: any): JSX.Element {
+function PatientMedicalBook(): JSX.Element {
     const [patient, setPatient] = useState<IPatient>();
+    const { selectedPatient } = useContext(InformationContext);
 
     useEffect(() => {
         setPatient(() => selectedPatient);
