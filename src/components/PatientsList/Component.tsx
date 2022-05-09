@@ -10,7 +10,7 @@ interface IProps {
 }
 
 function PatientsList({ patients, onPatientClickHandler }: IProps): JSX.Element {
-    const [patientsData, setPatientsData] = useState<IPatient[]>(patients);
+    const [patientsData, setPatientsData] = useState<any>(patients);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => setIsLoading(false), []);
