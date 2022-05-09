@@ -44,7 +44,7 @@ const Home: NextPage = () => {
     const fetchPatients = async (): Promise<void> => {
         const patients: IPatient[] = await getPatients();
         setPatientsData(patients);
-        setSelectedPatient(patients[0]);
+        !selectedPatient && setSelectedPatient(patients[0]);
     };
 
     const filterPatients = (): IPatient[] | undefined =>
@@ -56,6 +56,12 @@ const Home: NextPage = () => {
     useEffect(() => {
         fetchPatients();
     }, []);
+
+    useEffect(() => {
+        setSelectedPatient(() => {
+            return patientsData && patientsData.find((patient: IPatient) => patient.id === selectedPatient?.id);
+        });
+    }, [patientsData]);
 
     const onSelectPatientHandle = (patient: IPatient): void => setSelectedPatient(patient);
 
