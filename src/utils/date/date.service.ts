@@ -1,6 +1,14 @@
 import { Timestamp } from 'firebase/firestore';
 
 export const getDateByDefaultFormat = (date: Timestamp): string => {
+    if (!date) {
+        return 'Unknown date';
+    }
+
+    if (!date.toDate) {
+        return 'Invalid date format';
+    }
+
     const inputDate = date.toDate();
     const yyyy = inputDate.getFullYear();
     const mm: string = inputDate.toLocaleString('en-us', { month: 'long' }).slice(0, 3);
@@ -14,6 +22,14 @@ export const convertDateToTimestamp = (date: Date): Timestamp => {
 };
 
 export const getAge = (date: Timestamp): string => {
+    if (!date) {
+        return 'Unknown';
+    }
+
+    if (!date.toDate()) {
+        return 'Invalid date format';
+    }
+
     const inputDate = date.toDate();
     const today = new Date();
     const birthDate = new Date(inputDate);
